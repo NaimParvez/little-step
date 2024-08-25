@@ -33,11 +33,14 @@
             <div class="col-lg-3 col-sm-6 mix {{category.slug}}">
                 <div class="single-product-item">
                     <figure>
-                        <a href="#"><img style="height:320px ;" src="{{product.thumbnail}}" alt=""></a>
+                        <a href="{% url 'product-details' product.slug %}"><img style="height:320px ;" src="{{product.thumbnail}}" alt=""></a>
                         {% comment %} <div class="p-status">new</div> {% endcomment %} 
                     </figure>
                     <div class="product-text">
-                        <h6>{{product.title | truncatewords:10}}</h6>
+                        <a class="text-decoration-none" href="{% url 'product-details' product.slug %}">
+                            <h6>{{product.title | truncatewords:10}}</h6>
+                        </a>
+                        
                         <p>{{product.price}}</p>
                     </div>
                 </div>
@@ -64,11 +67,13 @@
             <div class="col-lg-3 col-sm-6 mix ">
                 <div class="single-product-item">
                     <figure>
-                        <a href="#"><img style="height:320px ;" src="{{product.thumbnail}}" alt=""></a>
+                        <a href="{% url 'product-details' product.slug %}"><img style="height:320px ;" src="{{product.thumbnail}}" alt=""></a>
                         
                     </figure>
                     <div class="product-text">
-                        <h6>{{product.title | truncatewords:10}}</h6>
+                        <a class="text-decoration-none" href="{% url 'product-details' product.slug %}">
+                            <h6>{{product.title | truncatewords:10}}</h6>
+                        </a>
                         <p>{{product.price}}</p>
                     </div>
                 </div>
