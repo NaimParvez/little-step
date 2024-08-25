@@ -20,7 +20,7 @@
             <nav class="main-menu mobile-menu">
                 <ul>
                     <li><a class="" href="{% url 'home' %}">Home</a></li>
-                    <li><a class="" href="#">Products</a></li>
+                    <li><a class="" href="{% url 'product-list' %}">Products</a></li>
                     <li><a href="#">Categories</a>
                         <ul class="sub-menu">
                             {% for category in categories %}
