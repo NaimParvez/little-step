@@ -3,7 +3,7 @@ from django.db import models
 # Create your models here.
 class Category(models.Model):
     title = models.CharField(max_length=150, unique=True)
-    slug = models.SlugField( unique=True)
+    slug = models.SlugField( unique=True,max_length=150)
     featured= models.BooleanField(default=False)
     created_data = models.DateTimeField(auto_now_add=True)
     
@@ -14,8 +14,8 @@ class Category(models.Model):
         return self.title
     
 class Product(models.Model):
-    title = models.CharField(max_length=150, unique=True)
-    slug = models.SlugField( unique=True)
+    title = models.CharField(max_length=250, unique=True)
+    slug = models.SlugField( unique=True,max_length=250)
     category = models.ForeignKey(Category,related_name='products', on_delete=models.CASCADE)
     thumbnail = models.URLField()
     description = models.TextField(null=True,blank=True,default='N/A')
@@ -24,6 +24,7 @@ class Product(models.Model):
     # active = models.BooleanField(default=True)
     created_data = models.DateTimeField(auto_now_add=True)
     updated_data = models.DateTimeField(auto_now=True)
+    # color = models.CharField(max_length=50, null=True, blank=True)
     
     class Meta:
         ordering =['-id']
