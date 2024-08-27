@@ -4,7 +4,8 @@ from.views import(
     Home,
     ProductDetails,
     CategorytDetails,
-    ProductList
+    ProductList,
+    SearchProducts
 )
 
 urlpatterns=[
@@ -12,6 +13,6 @@ urlpatterns=[
     path('product-details/<str:slug>/',ProductDetails.as_view(),name='product-details'),
     path('category-details/<str:slug>/',CategorytDetails.as_view(),name='category-details'),
     path('product-list/',ProductList.as_view(),name='product-list'),
-
+    path('search-products/',SearchProducts.as_view(),name='search-products'),
 
 ]

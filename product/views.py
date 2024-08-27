@@ -1,4 +1,6 @@
 from typing import Any
+from django.db.models import Q
+from django.shortcuts import render
 from django.views import generic
 from django.core.paginator import(
     PageNotAnInteger,
@@ -82,3 +84,19 @@ class ProductList(generic.ListView):
         context['object_list'] = queryset
         context['paginator'] = paginator
         return context
+    
+class SearchProducts(generic.View):
+     
+    def get(self,*args,**kwargs):
+        key =self.request.GET.get('key','')
+        products= Product.objects.filter(
+            Q(title__icontains=key)|
+            Q(category__title__icontains=key)
+        )
+            
+        context ={
+            'products':products,
+            "key":key
+        }
+        
+        return render(self.request,'product/search-products.html',context)
