@@ -45,7 +45,13 @@
                         <td class="price-col">{{product.price|floatformat:"2"}}</td>
                         <td class="quantity-col">
                             <div class="pro-qty">
-                                <input type="text" value="{{item.quantity}}">
+                                <a href="?product_id = {{product.id}}&&quantity=-1">
+                                    <span class="dec qtybtn">-</span>
+                                </a>
+                                <input disabled text="text" value="{{item.quantity}}">
+                                <a href="?product_id = {{product.id}}&&quantity=+1">
+                                    <span class="inc qtybtn">+</span>
+                                </a>
                             </div>
                         </td>
                         <td class="total">{{item.subtotal|floatformat:"2"}}</td>

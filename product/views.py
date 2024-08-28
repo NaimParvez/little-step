@@ -79,17 +79,22 @@ class ProductList(generic.ListView):
     context_object_name='object_list'
     paginate_by=5
     
-    def get(self, request, *args, **kwargs):
-        cart_items=Cart(self.request)
-        
-    
-    def get_context_data(self,**kwargs):
+    def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        page_obj =CustomPaginator(self.request,self.get_queryset(),self.paginate_by)
+        
+        # Add cart items to the context
+        cart_items = Cart(self.request)
+        context['cart_items'] = cart_items
+        
+        # Pagination logic
+        page_obj = CustomPaginator(self.request, self.get_queryset(), self.paginate_by)
         queryset = page_obj.get_queryset()
-        paginator =page_obj.paginator
+        paginator = page_obj.paginator
+        
+        # Update the context with paginated objects and paginator
         context['object_list'] = queryset
         context['paginator'] = paginator
+        
         return context
     
 class SearchProducts(generic.View):
