@@ -42,7 +42,12 @@ class Cart(object):
     def save(self):
         self.session.modified =True
 
-
-
     def __len__(self):
         return len(list(self.cart.keys()))
+    
+    def clear(self):
+        try:
+            del self.session[self.cart_id]
+        except:
+            pass
+        self.save
