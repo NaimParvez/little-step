@@ -1,3 +1,4 @@
+import copy
 from django.views import generic
 from django.urls import reverse_lazy
 from django.contrib import messages
@@ -10,6 +11,8 @@ from django.contrib.auth.views import (
     PasswordResetView,
     PasswordResetConfirmView
 )
+
+from cart.carts import Cart
 
 from .forms import (
     LoginForm,
@@ -56,7 +59,11 @@ class Login(LogoutRequiredMixin, generic.View):
 
 class Logout(generic.View):
     def get(self, *args, **kwargs):
+        cart=Cart(self.request)
+        current_cart=copy.deepcopy(cart.cart)
+        # coupon=copy.deepcopy(cart.coupon)
         logout(self.request)
+        # cart.resorte_after_logout(current_cart,coupon)
         return redirect('login')
 
 

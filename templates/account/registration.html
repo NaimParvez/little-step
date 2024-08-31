@@ -1,0 +1,70 @@
+{% extends '../base.html' %}
+{% load static %}
+{% block title %}Registration{% endblock title%}
+
+{% block content %}
+    <!-- Page Add Section Begin -->
+    <section class="page-add">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4">
+                    <div class="page-breadcrumb">
+                        <h2>Create new account</h2>
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+    </section>
+    <!-- Page Add Section End -->
+
+    <!-- Contact Section Begin -->
+    <div class="contact-section">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8">
+                    <form action="#" class="contact-form" novalidate method="POST">
+                        {% csrf_token %}
+                        <div class="row">
+                            {%if messages %}
+                            <div class="col-lg-12 py-2">
+                                {% include '../message.html' %}
+                            </div>
+                            {%endif%}
+
+                            <div class="col-lg-12 py-2">
+                                <input name="username" type="text" placeholder="Enter username">
+                                {{form.username.errors}}
+                            </div>
+                            <div class="col-lg-12 py-2">
+                                <input name="email" type="email" placeholder="Enter email address">
+                                {{form.email.errors}}
+                            </div>
+                            <div class="col-lg-12 py-2">
+                                <input name="password" type="password" placeholder="Enter password">
+                                {{form.password.errors}}
+                            </div>
+                            <div class="col-lg-12 py-2">
+                                <input name="password2" type="password" placeholder="Confirm password">
+                                {{form.password2.errors}}
+                            </div>
+                            
+                            <div class="col-lg-12 text-right">
+                                <button class="btn-block" type="submit">Register</button>
+                            </div>
+                            <div class="col-lg-12 my-2 text-center">
+                                <p>Already have an account? 
+                                    <strong class="ml-2">
+                                    <a class="text-decoration-none text-dark" href="{% url 'login' %}">Login</a>
+                                    </strong>
+                                </p>
+                            </div>
+                        </div>
+                    </form>
+                </div>             
+            </div>
+        </div>
+    </div>
+    <!-- Contact Section End -->
+{% endblock content %}
+    

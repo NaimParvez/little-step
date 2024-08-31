@@ -13,10 +13,12 @@
                     <span>{{cart|length}}</span>
                 </a>
             </div>
+            {%if not request.user.is_authenticated %}   
             <div class="user-access">
-                <a href="#">Register</a>
-                <a href="#" class="in">Sign in</a>
+                <a href="{% url 'login' %}">Register</a>
+                <a href="{% url 'login' %}" class="in">Sign in</a>
             </div>
+            {%endif%}
             <nav class="main-menu mobile-menu">
                 <ul>
                     <li><a class="" href="{% url 'home' %}">Home</a></li>
@@ -28,6 +30,21 @@
                             {% endfor %}
                         </ul>
                     </li>
+                    {%if request.user.is_authenticated %}
+                    <li>
+                        <a class="text-decoration-none" href="#">
+                        <img src="{% static 'img/icons/man.png' %}" alt="">
+                        {% comment %} {{request.user.username}} {% endcomment %}
+                    </a>
+                        <ul class="sub-menu">
+                            
+                            <li><a href="{% url 'logout' %}">Logout</a></li>
+                            <li><a href="{% url 'logout' %}">Order</a></li>
+                            <li><a href="{% url 'change_password' %}">Change password</a></li>
+                            
+                        </ul>
+                    </li>
+                    {%endif%}
                 </ul>
             </nav>
         </div>
