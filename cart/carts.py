@@ -42,13 +42,5 @@ class Cart(object):
     def save(self):
         self.session.modified =True
 
-
-
     def __len__(self):
         return len(list(self.cart.keys()))
-    
-    
-    # def restore_after_logout(self,cart={},coupon=None):
-    #     self.cart=self.session[self.cart_id]=cart
-    #     self.coupon=self.session[self.cart_id]=coupon
-    #     self.save()
