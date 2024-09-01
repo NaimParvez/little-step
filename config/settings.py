@@ -134,6 +134,7 @@ AUTH_USER_MODEL ='user_account.User'
 
 SESSION_COOKIE_AGE= 864000
 CART_ID='cart'
+COUPON_ID="coupon"
 
 
 
