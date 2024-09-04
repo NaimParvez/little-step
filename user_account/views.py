@@ -63,7 +63,7 @@ class Logout(generic.View):
         current_cart=copy.deepcopy(cart.cart)
         coupon=copy.deepcopy(cart.coupon)
         logout(self.request)
-        cart.resorte_after_logout(current_cart,coupon)
+        cart.restore_after_logout(current_cart,coupon)
         return redirect('login')
 
 

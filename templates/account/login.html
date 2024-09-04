@@ -40,7 +40,13 @@
                                 <input name="password" type="password" placeholder="Enter your password">
                                 {{form.password.errors}}
                             </div>
-                            
+                            <div class="col-lg-12 my-2 text-right">
+                                <p>
+                                    <strong class="ml-2">
+                                    <a class="text-decoration-none text-dark" href="{% url 'password_reset' %}">Forgot password?</a>
+                                    </strong>
+                                </p>
+                            </div>
                             <div class="col-lg-12 text-right">
                                 <button class="btn-block" type="submit">Login</button>
                             </div>

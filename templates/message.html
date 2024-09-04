@@ -1,4 +1,4 @@
-<<<<<<< HEAD
+
 {%for message in messages%}
 <div class="alert alert-{{message.tags}} alert-dismissible" role="alert">
     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
@@ -7,13 +7,3 @@
     <strong>{{message.message}}!</strong>
 </div>
 {%endfor%}
-=======
-{% for message in messages %}
-<div class="alert alert-{{message.tags}}alert-dismissible" role="alert">
-   <button type="button" class="close" data-bs-dismiss="alert" aria-label="Close">
-        <span araia-hidden="true">&times;</span>
-    </button> 
-   <strong>{{message.message}}</strong>
-</div>
-{% endfor %}
->>>>>>> 74d08fed109886f36a561b118abf0d0ca8a46b5f
