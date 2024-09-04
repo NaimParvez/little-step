@@ -68,8 +68,7 @@ class CartItems(generic.TemplateView):
                     return redirect('cart')
                 
                 if cart.total() < coupon.required_amount_to_use_coupon:
-                    messages.warning(self.request,f"You have to shop at least {coupon.
-                    required_amount_to_use_coupon}to use this coupon code")
+                    messages.warning(self.request,f"You have to shop at least {coupon.required_amount_to_use_coupon}to use this coupon code")
                     return redirect('cart')
                 
                 cart.add_coupon(coupon.id)
