@@ -43,66 +43,66 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {% for item in cart %}
-                    {% with product=item.product %}
-                    <tr>
-                        <td class="product-col">
-                            <img style="height:100px; " src="{{product.thumbnail}}" alt="">
-                            <div class="p-title">
-                                <h5>{{product.title}}</h5>
-                            </div>
-                        </td>
-                        <td class="price-col">{{product.price|floatformat:"2"}}</td>
-                        <td class="quantity-col">
-                            <div class="pro-qty">
-                                <a href="?product_id ={{product.id}}&&quantity=-1">
-                                    <span class="dec qtybtn">-</span>
-                                </a>
-                                <input disabled text="text" value="{{item.quantity}}">
-                                <a href="?product_id ={{product.id}}&&quantity=+1">
-                                    <span class="inc qtybtn">+</span>
-                                </a>
-                            </div>
-                        </td>
-                        <td class="total">{{item.subtotal|floatformat:"2"}}</td>
-                        <td class="product-close">
-                            <a class="text-decoration-none text-dark" herf="?product_id ={{product.id}}&&quantity=-{{item.quantity}}">X</a>
-                        </td>
-                    </tr>
-                    {% endwith %}
-                    {% endfor %}
-                </tbody>
-            </table>
-            <hr>
-            <h4 class="text-center"> 
-                <strong>Total = </strong>{{cart.total}}
-            </h4>
+    {% for item in cart %}
+    {% with product=item.product %}
+    <tr>
+        <td class="product-col">
+            <img style="height:100px;" src="{{ product.thumbnail }}" alt="">
+            <div class="p-title">
+                <h5>{{ product.title }}</h5>
+            </div>
+        </td>
+        <td class="price-col">{{ product.price|floatformat:"2" }}</td>
+        <td class="quantity-col">
+            <div class="pro-qty">
+                <a href="?product_id={{ product.id }}&quantity=-1">
+                    <span class="dec qtybtn">-</span>
+                </a>
+                <input disabled type="text" value="{{ item.quantity }}">
+                <a href="?product_id={{ product.id }}&quantity=+1">
+                    <span class="inc qtybtn">+</span>
+                </a>
+            </div>
+        </td>
+        <td class="total">{{ item.subtotal|floatformat:"2" }}</td>
+        <td class="product-close">
+            <a class="text-decoration-none text-dark" href="?product_id={{ product.id }}&quantity=-{{ item.quantity }}">X</a>
+        </td>
+    </tr>
+    {% endwith %}
+    {% endfor %}
+</tbody>
+</table>
+<hr>
+<h4 class="text-center">
+    <strong>Total = </strong>{{ cart.total }}
+</h4>
+</div>
+<div class="cart-btn">
+    <div class="row">
+        <div class="col-lg-6">
+            <form action="{% url 'add-coupon' %}" method="POST">
+                {% csrf_token %}
+                <div class="coupon-input">
+                    <input name="coupon" type="text" placeholder="Enter coupon code">
+                </div>
+            </form>
         </div>
-        <div class="cart-btn">
-            <div class="row">
-                <div class="col-lg-6">
-                    <form action="{% url 'add-coupon' %}" method="POST">
-                        {% csrf_token %}
-                        <div class="coupon-input">
-                            <input name="coupon" type="text" placeholder="Enter cupone code">
-                        </div>
-                    </form>
-                </div>
-                <div class="col-lg-5 offset-lg-1 text-left text-lg-right">
-                    <div class="site-btn clear-btn">
-                        <a class="text-decoration-none text-dark" herf="?clear=true">
-                            Clear Cart
-                        </a>
-                    </div>
-                    <div class="site-btn clear-btn">
-                        <a class="text-decoration-none text-dark" herf="#">
-                            Checkout
-                        </a>
-                    </div>
-                </div>
+        <div class="col-lg-5 offset-lg-1 text-left text-lg-right">
+            <div class="site-btn clear-btn">
+                <a class="text-decoration-none text-dark" href="?clear=true">
+                    Clear Cart
+                </a>
+            </div>
+            <div class="site-btn clear-btn">
+                <a class="text-decoration-none text-dark" href="#">
+                    Checkout
+                </a>
             </div>
         </div>
     </div>
+</div>
+</div>
 </div>
 {% else %}
 <div class="cart-page">

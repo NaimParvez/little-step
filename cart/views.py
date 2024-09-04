@@ -22,37 +22,29 @@ class AddToCart(generic.View):
 
 class CartItems(generic.TemplateView):
     template_name = 'cart/cart.html'
-  
+
     def get(self, request, *args, **kwargs):
-        product_id = request.GET.get('product_id')
-        quantity = request.GET.get('quantity')
+        product_id = request.GET.get('product_id', None)
+        quantity = request.GET.get('quantity', None)
         clear = request.GET.get('clear', False)
         cart = Cart(request)
-        
-        # Ensure product_id and quantity are present and valid
         if product_id and quantity:
-            try:
-                quantity = int(quantity)
-            except (ValueError, TypeError):
-                messages.error(request, "Invalid quantity provided.")
-                return redirect('cart')
-            
-            if quantity > 0:
-                product = get_object_or_404(Product, id=product_id)
+            product = get_object_or_404(Product, id=product_id)
+            if int(quantity) > 0:
                 if product.in_stock:
-                    cart.update(int(product_id), quantity)
+                    cart.update(int(product_id), int(quantity))
+                    return redirect('cart')
                 else:
-                    messages.warning(request, "The product is not in stock anymore.")
+                    messages.warning(request, "The product is not in stock anymore")
+                    return redirect('cart')
             else:
-                messages.warning(request, "Quantity must be greater than zero.")
-            return redirect('cart')
-        
-        # Clear the cart if requested
+                cart.update(int(product_id), int(quantity))
+                return redirect('cart')
+
         if clear:
             cart.clear()
             return redirect('cart')
 
-        # Default behavior: return the template view
         return super().get(request, *args, **kwargs)
       
 class AddCoupon(generic.View):
