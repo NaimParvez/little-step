@@ -68,11 +68,21 @@ class Cart(object):
         self.save()
     
     def total(self):
-        amount=sum(product['subtotal'] for product in self.cart.values())
+    # Calculate the sum of subtotals in the cart
+        amount = sum(product['subtotal'] for product in self.cart.values())
+        before_discount = amount
 
+    # Check if a coupon is applied
         if self.coupon:
-            coupon=Coupon.objects.get(id=self.coupon)
-            amount-=amount*(coupon.discount/100)
+            try:
+            # Safely get the coupon and apply the discount
+                coupon = Coupon.objects.get(id=self.coupon)
+                amount -= amount * (coupon.discount / 100)
+                discount = coupon.discount
+            except Coupon.DoesNotExist:
+                discount = 0  # If coupon doesn't exist, no discount
+        else:
+            discount = 0  # No discount if no coupon is applied
 
-
+    # Return the total amount after discount, the original amount, and the discount percentage
         return amount

@@ -2,7 +2,7 @@ from datetime import datetime
 from django.views import generic
 from django.utils import timezone
 from django.contrib import messages
-from django.shortcuts import get_object_or_404,redirect
+from django.shortcuts import get_object_or_404,redirect,render
 from django.views.generic import TemplateView
 
 from .carts import Cart
@@ -50,13 +50,14 @@ class CartItems(generic.TemplateView):
 class AddCoupon(generic.View):
     def post(self,*args,**kwargs):
         code=self.request.POST.get('coupon', '')
-        coupon= Coupon.objects.filter(code_iexact=code,active=True)
+        coupon= Coupon.objects.filter(code__iexact=code)
         cart =Cart(self.request)
 
+        
 
         if coupon.exists():
             coupon = coupon.first()
-            current_time = datetime.date(timezone.now())
+            current_time = timezone.now().date()
             active_date=coupon.active_date
             expiry_date = coupon.expiry_date
             if current_time > expiry_date:
@@ -71,8 +72,20 @@ class AddCoupon(generic.View):
                 return redirect('cart')
                 
             cart.add_coupon(coupon.id)
-            messages.success(self.request,"Your coupon has been included successfully !")
+            # total, before_discount, discount = cart.total()
+
+            messages.success(self.request, "Your coupon has been included successfully!")
+            # Redirect to cart with total, before_discount, and discount
+            # self.request.session['cart_context'] = {
+            #     'total': total,
+            #     'before_discount': before_discount,
+            #     'discount': discount,
+            # }
+            
             return redirect('cart')
         else:
             messages.warning(self.request,"Invalid coupon code")
             return redirect('cart')
+        
+
+    

@@ -86,6 +86,7 @@
                 <div class="coupon-input">
                     <input name="coupon" type="text" placeholder="Enter coupon code">
                 </div>
+                {% comment %} <button class="site-btn clear-btn mt-3" type="submit">Apply</button> {% endcomment %}
             </form>
         </div>
         <div class="col-lg-5 offset-lg-1 text-left text-lg-right">
@@ -95,7 +96,7 @@
                 </a>
             </div>
             <div class="site-btn clear-btn">
-                <a class="text-decoration-none text-dark" href="#">
+                <a class="text-decoration-none text-dark" href="{% url 'checkout' %}">
                     Checkout
                 </a>
             </div>
