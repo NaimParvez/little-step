@@ -60,32 +60,28 @@ class AddCoupon(generic.View):
             current_time = timezone.now().date()
             active_date=coupon.active_date
             expiry_date = coupon.expiry_date
+            
+            
+            
             if current_time > expiry_date:
                 messages.warning(self.request,"The coupon expired")
                 return redirect('cart')
+            
             if current_time < active_date:
                 messages.warning(self.request,"The coupon is yet to be available")
                 return redirect('cart')
                 
-            if cart.total() < coupon.required_amount_to_use_coupon:
-                messages.warning(self.request,f"You have to shop at least {coupon.required_amount_to_use_coupon}to use this coupon code")
+            if cart.total()['before_discount'] < coupon.required_amount_to_use_coupon:
+                messages.warning(
+                    self.request, f"You have to shop at least {coupon.required_amount_to_use_coupon} to use this coupon code")
                 return redirect('cart')
                 
             cart.add_coupon(coupon.id)
-            # total, before_discount, discount = cart.total()
-
             messages.success(self.request, "Your coupon has been included successfully!")
-            # Redirect to cart with total, before_discount, and discount
-            # self.request.session['cart_context'] = {
-            #     'total': total,
-            #     'before_discount': before_discount,
-            #     'discount': discount,
-            # }
+            
             
             return redirect('cart')
         else:
             messages.warning(self.request,"Invalid coupon code")
             return redirect('cart')
         
-
-    

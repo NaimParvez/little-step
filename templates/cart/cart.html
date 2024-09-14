@@ -1,36 +1,30 @@
-{% extends '../base.html' %}
-{% load static %}
-{% block title %} Cart Items {% endblock title %}
+{% extends '../base.html' %} {% load static %}
+ {% block title %} Cart Items {%endblock title %} 
+ {% block content %}
 
-{% block content %}
- 
- <!-- Page Add Section Begin -->
- <section class="page-add cart-page-add">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-4">
-                <div class="page-breadcrumb">
-                    {% if cart %}
-                    <h3>Cart({{cart|length}})</h3>
-                    {% endif %}
-                </div>
-            </div> 
+<!-- Page Add Section Begin -->
+<section class="page-add cart-page-add">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-4">
+        <div class="page-breadcrumb">
+          {% if cart %}
+          <h3>Cart({{cart|length}})</h3>
+          {% endif %}
         </div>
+      </div>
     </div>
+  </div>
 </section>
 <!-- Page Add Section End -->
 {% if cart %}
 <div class="cart-page">
-<!-- Cart Page Section Begin -->
-<div class="cart-page">
     <div class="container">
         <div class="row py-2">
             <div class="col-md-12">
-                 {% if messages %}
-                 {% include '../message.html' %}
-                 {% endif %}
+              {% if messages %} {% include '../message.html' %} {% endif %}
             </div>
-        </div>
+          </div>
         <div class="cart-table">
             <table>
                 <thead>
@@ -38,78 +32,131 @@
                         <th class="product-h">Product</th>
                         <th>Price</th>
                         <th class="quan">Quantity</th>
-                        <th>Subtotal</th>
+                        <th>Total</th>
                         <th></th>
                     </tr>
                 </thead>
                 <tbody>
-    {% for item in cart %}
-    {% with product=item.product %}
-    <tr>
-        <td class="product-col">
-            <img style="height:100px;" src="{{ product.thumbnail }}" alt="">
-            <div class="p-title">
-                <h5>{{ product.title }}</h5>
-            </div>
-        </td>
-        <td class="price-col">{{ product.price|floatformat:"2" }}</td>
-        <td class="quantity-col">
-            <div class="pro-qty">
-                <a href="?product_id={{ product.id }}&quantity=-1">
-                    <span class="dec qtybtn">-</span>
-                </a>
-                <input disabled type="text" value="{{ item.quantity }}">
-                <a href="?product_id={{ product.id }}&quantity=+1">
-                    <span class="inc qtybtn">+</span>
-                </a>
-            </div>
-        </td>
-        <td class="total">{{ item.subtotal|floatformat:"2" }}</td>
-        <td class="product-close">
-            <a class="text-decoration-none text-dark" href="?product_id={{ product.id }}&quantity=-{{ item.quantity }}">X</a>
-        </td>
-    </tr>
-    {% endwith %}
-    {% endfor %}
-</tbody>
-</table>
-<hr>
-<h4 class="text-center">
-    <strong>Total = </strong>{{ cart.total }}
-</h4>
-</div>
-<div class="cart-btn">
-    <div class="row">
-        <div class="col-lg-6">
-            <form action="{% url 'add-coupon' %}" method="POST">
-                {% csrf_token %}
-                <div class="coupon-input">
-                    <input name="coupon" type="text" placeholder="Enter coupon code">
+                    {% for item in cart %} 
+            {% with product=item.product %}
+            <tr>
+              <td class="product-col">
+                <img
+                  style="height: 100px"
+                  src="{{ product.thumbnail }}"
+                  alt=""
+                />
+                <div class="p-title">
+                  <h5>{{ product.title }}</h5>
                 </div>
-                {% comment %} <button class="site-btn clear-btn mt-3" type="submit">Apply</button> {% endcomment %}
-            </form>
+              </td>
+              <td class="price-col">{{ product.price|floatformat:"2" }}</td>
+              <td class="quantity-col">
+                <div class="pro-qty">
+                  <a href="?product_id={{ product.id }}&quantity=-1">
+                    <span class="dec qtybtn">-</span>
+                  </a>
+                  <input disabled type="text" value="{{ item.quantity }}" />
+                  <a href="?product_id={{ product.id }}&quantity=+1">
+                    <span class="inc qtybtn">+</span>
+                  </a>
+                </div>
+              </td>
+              <td class="total">{{ item.subtotal|floatformat:"2" }}</td>
+              <td class="product-close">
+                <a
+                  class="text-decoration-none text-dark"
+                  href="?product_id={{ product.id }}&quantity=-{{ item.quantity }}"
+                  >X</a
+                >
+              </td>
+            </tr>
+            {% endwith %} 
+            {% endfor %}
+                </tbody>
+            </table>
         </div>
-        <div class="col-lg-5 offset-lg-1 text-left text-lg-right">
-            <div class="site-btn clear-btn">
-                <a class="text-decoration-none text-dark" href="?clear=true">
-                    Clear Cart
-                </a>
-            </div>
-            <div class="site-btn clear-btn">
-                <a class="text-decoration-none text-dark" href="{% url 'checkout' %}">
-                    Checkout
-                </a>
+        <div class="cart-btn">
+            <div class="row">
+                <div class="col-lg-6">
+                    <form id ="coupon_form" action="{% url 'add-coupon' %}" method="POST">
+                        {% csrf_token %}
+                        <div class="coupon-input">
+                          <input
+                            name="coupon"
+                            type="text"
+                            placeholder="Enter coupon code"
+                          />
+                        </div>
+                        
+                      
+                </div>
+                <div class="col-lg-5 offset-lg-1 text-left text-lg-right">
+                    <div class="site-btn clear-btn"><a class="text-decoration-none text-dark" href="?clear=true">
+                        Clear Cart
+                      </a></div>
+                    <div class="site-btn update-btn"">
+                      <a class="text-decoration-none text-dark" href="javascript:void(0);" onclick="document.getElementById('coupon_form').submit();">Apply Coupon</a>
+                    </div>
+                </div>
+              </form>
             </div>
         </div>
     </div>
-</div>
-</div>
-</div>
-{% else %}
-<div class="cart-page">
-    <div class="container">
-        {% include '../no-cart.html' %}
+    <div class="shopping-method">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    
+                    <div class="total-info">
+                        <div class="total-table">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>Subtotal</th>
+                                        <th>Discount(%)</th>
+                                        <th>Discount(Taka)</th>
+                                        <th class="total-cart">Total Cart</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                  <tr>
+                                      <!-- Subtotal before discount -->
+                                      <td class="sub-total">
+                                          <strong></strong>{{ cart.total.before_discount|floatformat:2 }}
+                                      </td>
+                              
+                                      <!-- Discount percentage -->
+                                      <td class="discount">
+                                          <strong></strong>{{ cart.total.discount }}%
+                                      </td>
+                              
+                                      <!-- Discount in currency -->
+                                      <td class="discount-amount">
+                                          <strong></strong>{{ cart.total.discount_amount|floatformat:2 }}
+                                      </td>
+                              
+                                      <!-- Final total after discount -->
+                                      <td class="total-cart-p">
+                                          <strong></strong>{{ cart.total.total|floatformat:2 }}৳ 
+                                      </td>
+                                  </tr>
+                              </tbody>
+                            </table>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-12 text-right">
+                                <a href="#" class="primary-btn chechout-btn">Proceed to checkout</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
+    {% else %}
+  <div class="cart-page">
+    <div class="container">{% include '../no-cart.html' %}</div>
+  </div>
+  {% endif %} {% endblock content %}
 </div>
-{% endif %}
-{% endblock content %}

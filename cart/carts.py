@@ -68,21 +68,42 @@ class Cart(object):
         self.save()
     
     def total(self):
-    # Calculate the sum of subtotals in the cart
+           # Calculate the sum of subtotals in the cart
         amount = sum(product['subtotal'] for product in self.cart.values())
         before_discount = amount
 
-    # Check if a coupon is applied
+        discount = 0
+        discount_amount = 0
+        
+        # Check if a coupon is applied
         if self.coupon:
-            try:
-            # Safely get the coupon and apply the discount
-                coupon = Coupon.objects.get(id=self.coupon)
-                amount -= amount * (coupon.discount / 100)
-                discount = coupon.discount
-            except Coupon.DoesNotExist:
-                discount = 0  # If coupon doesn't exist, no discount
-        else:
-            discount = 0  # No discount if no coupon is applied
+           try:
+            # Get the coupon object
+              coupon = Coupon.objects.get(id=self.coupon)
 
-    # Return the total amount after discount, the original amount, and the discount percentage
-        return amount
+            # Check if the total amount meets the required amount for the coupon
+              if before_discount >= coupon.required_amount_to_use_coupon:
+                # Apply the discount
+                discount = coupon.discount
+                discount_amount = before_discount * (discount / 100)
+                # Deduct discount from total
+                amount -= discount_amount
+              else:
+                # If total is below required amount, clear the coupon
+                self.clear_coupon()
+
+           except Coupon.DoesNotExist:
+                discount = 0  # No discount if coupon doesn't exist
+
+        # Return the total amount after discount, original amount, and discount percentage
+        return {
+            'total': amount,
+            'before_discount': before_discount,
+            'discount': discount,  # Percentage
+            'discount_amount': discount_amount  # Discount in taka
+        }
+
+    def clear_coupon(self):
+    # """Clear the applied coupon if it no longer qualifies."""
+        self.session[self.coupon_id] = None
+        self.save()
