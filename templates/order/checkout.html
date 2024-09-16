@@ -36,53 +36,10 @@
                             <p class="in-name">Name*</p>
                         </div>
                         <div class="col-lg-5">
-                            <input type="text" placeholder="First Name">
+                            <input name="first_name" type="text" placeholder="First Name">
                         </div>
                         <div class="col-lg-5">
-                            <input type="text" placeholder="Last Name">
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-2">
-                            <p class="in-name">Street Address*</p>
-                        </div>
-                        <div class="col-lg-10">
-                            <input type="text">
-                            <input type="text">
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-2">
-                            <p class="in-name">Country*</p>
-                        </div>
-                        <div class="col-lg-10">
-                            <select class="cart-select country-usa">
-                                <option>USA</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-2">
-                            <p class="in-name">City*</p>
-                        </div>
-                        <div class="col-lg-10">
-                            <input type="text">
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-2">
-                            <p class="in-name">Country</p>
-                        </div>
-                        <div class="col-lg-10">
-                            <input type="text">
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-lg-2">
-                            <p class="in-name">Post Code/ZIP*</p>
-                        </div>
-                        <div class="col-lg-10">
-                            <input type="text">
+                            <input name="last_name" type="text" placeholder="Last Name">
                         </div>
                     </div>
                     <div class="row">
@@ -90,9 +47,54 @@
                             <p class="in-name">Phone*</p>
                         </div>
                         <div class="col-lg-10">
-                            <input type="text">
+                            <input name="phone_no" type="text">
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="col-lg-2">
+                            <p class="in-name">Email</p>
+                        </div>
+                        <div class="col-lg-10">
+                            <input name="email" type="text">                        
+                        </div>
+                    </div>
+                   
+                    <div class="row">
+                        <div class="col-lg-2">
+                            <p class="in-name">Address*</p>
+                        </div>
+                        <div class="col-lg-10">
+                            <input name="address" type="text" placeholder="House no, Thana, Street no, etc*">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="division">Division*</label>
+                        <select id="division" name="division" class="form-control" required>
+                            <option value="">Select Division</option>
+                            <option value="Dhaka">Dhaka</option>
+                            <option value="Chittagong">Chittagong</option>
+                            <option value="Rajshahi">Rajshahi</option>
+                            <option value="Khulna">Khulna</option>
+                            <option value="Barisal">Barisal</option>
+                            <option value="Sylhet">Sylhet</option>
+                            <option value="Rangpur">Rangpur</option>
+                            <option value="Mymensingh">Mymensingh</option>
+                            
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="district">District*</label>
+                        <select id="district" name="district" class="form-control" required>
+                            <option value="">Select District</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="upazila">Upazila*</label>
+                        <select id="upazila" name="upazila" class="form-control" required>
+                            <option value="">Select Upazila</option>
+                        </select>
+                    </div>
+                    
                     <div class="row">
                         <div class="col-lg-12 text-right">
                             <div class="diff-addr">
@@ -106,15 +108,15 @@
                     <div class="order-table">
                         <div class="cart-item">
                             <span>Product</span>
-                            <p class="product-name">Blue Dotted Shirt</p>
+                            {% for item in cart %} 
+                            {% with product=item.product %}
+                            <p class="product-name">{{ forloop.counter }} .{{product.title | truncatewords:5}}</p> <br>
+                            {% endwith %} 
+                            {% endfor %}
                         </div>
                         <div class="cart-item">
                             <span>Price</span>
-                            <p>$29</p>
-                        </div>
-                        <div class="cart-item">
-                            <span>Quantity</span>
-                            <p>1</p>
+                            <p>{{cart.total.total}}</p>
                         </div>
                         <div class="cart-item">
                             <span>Shipping</span>

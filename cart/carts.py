@@ -97,10 +97,10 @@ class Cart(object):
 
         # Return the total amount after discount, original amount, and discount percentage
         return {
-            'total': amount,
-            'before_discount': before_discount,
-            'discount': discount,  # Percentage
-            'discount_amount': discount_amount  # Discount in taka
+            'total': round(amount,2),
+            'before_discount': round(before_discount,2),
+            'discount': round(discount,2),  # Percentage
+            'discount_amount': round(discount_amount,2)  # Discount in taka
         }
 
     def clear_coupon(self):
