@@ -31,70 +31,94 @@
                     <h3>Your Information</h3>
                 </div>
                 <div class="col-lg-9">
+                    <!-- Name Section -->
                     <div class="row">
                         <div class="col-lg-2">
                             <p class="in-name">Name*</p>
                         </div>
                         <div class="col-lg-5">
-                            <input name="first_name" type="text" placeholder="First Name">
+                            <input name="first_name" type="text" placeholder="First Name" class="form-control" required>
                         </div>
                         <div class="col-lg-5">
-                            <input name="last_name" type="text" placeholder="Last Name">
+                            <input name="last_name" type="text" placeholder="Last Name" class="form-control" required>
                         </div>
                     </div>
+        
+                    <!-- Phone Section -->
                     <div class="row">
                         <div class="col-lg-2">
                             <p class="in-name">Phone*</p>
                         </div>
                         <div class="col-lg-10">
-                            <input name="phone_no" type="text">
+                            <input name="phone_no" type="text" placeholder="Phone Number" class="form-control" required>
                         </div>
                     </div>
+        
+                    <!-- Email Section -->
                     <div class="row">
                         <div class="col-lg-2">
                             <p class="in-name">Email</p>
                         </div>
                         <div class="col-lg-10">
-                            <input name="email" type="text">                        
+                            <input name="email" type="text" placeholder="Email" class="form-control">
                         </div>
                     </div>
-                   
+        
+                    <!-- Address Section -->
                     <div class="row">
                         <div class="col-lg-2">
                             <p class="in-name">Address*</p>
                         </div>
                         <div class="col-lg-10">
-                            <input name="address" type="text" placeholder="House no, Thana, Street no, etc*">
+                            <input name="address" type="text" placeholder="House no, Thana, Street no, etc*" class="form-control" required>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label for="division">Division*</label>
-                        <select id="division" name="division" class="form-control" required>
-                            <option value="">Select Division</option>
-                            <option value="Dhaka">Dhaka</option>
-                            <option value="Chittagong">Chittagong</option>
-                            <option value="Rajshahi">Rajshahi</option>
-                            <option value="Khulna">Khulna</option>
-                            <option value="Barisal">Barisal</option>
-                            <option value="Sylhet">Sylhet</option>
-                            <option value="Rangpur">Rangpur</option>
-                            <option value="Mymensingh">Mymensingh</option>
-                            
-                        </select>
+        
+                    <!-- Division Section -->
+                    <div class="row mb-2">
+                        <div class="col-lg-2">
+                            <p class="in-name">Division*</p>
+                        </div>
+                        <div class="col-lg-10">
+                            <select id="division" name="division" class="form-control" required>
+                                <option value="">Select Division</option>
+                                <option value="Dhaka">Dhaka</option>
+                                <option value="Chittagong">Chittagong</option>
+                                <option value="Rajshahi">Rajshahi</option>
+                                <option value="Khulna">Khulna</option>
+                                <option value="Barisal">Barisal</option>
+                                <option value="Sylhet">Sylhet</option>
+                                <option value="Rangpur">Rangpur</option>
+                                <option value="Mymensingh">Mymensingh</option>
+                            </select>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="district">District*</label>
-                        <select id="district" name="district" class="form-control" required>
-                            <option value="">Select District</option>
-                        </select>
+        
+                    <!-- District Section -->
+                    <div class="row mb-2">
+                        <div class="col-lg-2">
+                            <p class="in-name">District*</p>
+                        </div>
+                        <div class="col-lg-10">
+                            <select id="district" name="district" class="form-control" required>
+                                <option value="">Select District</option>
+                            </select>
+                        </div>
                     </div>
-                    <div class="form-group">
-                        <label for="upazila">Upazila*</label>
-                        <select id="upazila" name="upazila" class="form-control" required>
-                            <option value="">Select Upazila</option>
-                        </select>
+        
+                    <!-- Upazila Section -->
+                    <div class="row mb-2">
+                        <div class="col-lg-2">
+                            <p class="in-name">Upazila*</p>
+                        </div>
+                        <div class="col-lg-10">
+                            <select id="upazila" name="upazila" class="form-control" required>
+                                <option value="">Select Upazila</option>
+                            </select>
+                        </div>
                     </div>
-                    
+        
+                    <!-- Shipping Option -->
                     <div class="row">
                         <div class="col-lg-12 text-right">
                             <div class="diff-addr">
@@ -104,14 +128,16 @@
                         </div>
                     </div>
                 </div>
+        
+                <!-- Order Summary Section -->
                 <div class="col-lg-3">
                     <div class="order-table">
                         <div class="cart-item">
                             <span>Product</span>
-                            {% for item in cart %} 
+                            {% for item in cart %}
                             {% with product=item.product %}
-                            <p class="product-name">{{ forloop.counter }} .{{product.title | truncatewords:5}}</p> <br>
-                            {% endwith %} 
+                            <p class="product-name">{{ forloop.counter }} .{{product.title | truncatewords:5}}</p><br>
+                            {% endwith %}
                             {% endfor %}
                         </div>
                         <div class="cart-item">
@@ -122,7 +148,6 @@
                             <span>Shipping</span>
                             <p>$10</p>
                         </div>
-
                         <div class="cart-total">
                             <span>Total</span>
                             <p>$39</p>
@@ -130,6 +155,8 @@
                     </div>
                 </div>
             </div>
+        
+            <!-- Payment Method Section -->
             <div class="row">
                 <div class="col-lg-12">
                     <div class="payment-method">
@@ -147,6 +174,7 @@
                 </div>
             </div>
         </form>
+        
     </div>
 </section>
 
