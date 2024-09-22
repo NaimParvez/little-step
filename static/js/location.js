@@ -122,3 +122,25 @@ document.getElementById('district').addEventListener('change', function () {
         });
     }
 });
+
+// const deliveryCharges = {
+//     'Dhaka': 200.00,
+//     'Chittagong': 300.00,
+//     'Rajshahi': 300.00,
+//     'Khulna': 300.00,
+//     'Barisal': 300.00,
+//     'Sylhet': 300.00,
+//     'Rangpur': 300.00,
+//     'Mymensingh': 300.00
+// };
+
+// document.getElementById('division').addEventListener('change', function() {
+//     const selectedDivision = this.value;
+//     const deliveryChargeDisplay = document.getElementById('charge-amount');
+
+//     if (selectedDivision in deliveryCharges) {
+//         deliveryChargeDisplay.textContent = deliveryCharges[selectedDivision].toFixed(2);
+//     } else {
+//         deliveryChargeDisplay.textContent = '0.00';
+//     }
+// });
