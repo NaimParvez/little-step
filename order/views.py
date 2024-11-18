@@ -5,21 +5,28 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from .forms import CheckoutForm
 from .models import Order, OrderItem
 from cart.carts import Cart
+import requests  # Make sure this line is present
+from django.conf import settings
 
 class Checkout(LoginRequiredMixin, FormView):
     login_url = reverse_lazy('login')
-    template_name = 'order/checkout.html'  # Add this to specify the template for rendering
+    template_name = 'order/checkout.html'
     form_class = CheckoutForm
-    success_url = reverse_lazy('order_confirmation')  # Redirect after successful form submission
+    success_url = reverse_lazy('order_confirmation')
 
     def get(self, *args, **kwargs):
         form = CheckoutForm()
         cart = Cart(self.request)
+        cart_total = cart.total()['total']
+        delivery_charge = self.calculate_delivery_charge(form.initial.get('division', 'Dhaka'))  # Adjust as needed
+        total_cost = cart_total + delivery_charge
+
         context = {
             'form': form,
             'cart': cart,
-            'cart_total': cart.total()['total'],  # Getting the total from the cart
-            'delivery_charge': 0  # Initialize with 0, will update on form submission
+            'cart_total': cart_total,
+            'delivery_charge': delivery_charge,
+            'total_cost': total_cost
         }
         return render(self.request, self.template_name, context)
 
@@ -35,15 +42,22 @@ class Checkout(LoginRequiredMixin, FormView):
         # Retrieve selected payment method
         payment_method = self.request.POST.get('payment_method')
 
-        # Process payment
-        payment_success = self.process_payment(payment_method, total_cost)
+        # Handle payment based on method
+        if payment_method == 'bkash':
+            payment_success = self.process_bkash_payment(total_cost)
+        elif payment_method == 'cod':
+            # Calculate advance payment (30% of total cost)
+            advance_payment = total_cost * 0.30
+            # Process advance payment via bKash
+            payment_success = self.process_bkash_payment(advance_payment)
+        else:
+            payment_success = False
 
         if not payment_success:
-            # Handle payment failure (show error, log the issue, etc.)
             form.add_error(None, "Payment failed. Please try again.")
             return self.form_invalid(form)
 
-        # Save the order if payment was successful
+        # Save the order
         order = Order.objects.create(
             user=self.request.user,
             first_name=form.cleaned_data.get('first_name'),
@@ -60,10 +74,14 @@ class Checkout(LoginRequiredMixin, FormView):
         )
         order.save()
 
-        # You can save the order items here if needed
-        # Example: 
-        # for item in cart:
-        #     OrderItem.objects.create(order=order, product=item['product'], quantity=item['quantity'], subtotal=item['subtotal'])
+        # Save order items
+        for item in cart:
+            OrderItem.objects.create(
+                order=order,
+                product=item['product'],
+                quantity=item['quantity'],
+                subtotal=item['subtotal']
+            )
 
         return super().form_valid(form)
 
@@ -84,7 +102,6 @@ class Checkout(LoginRequiredMixin, FormView):
         return context
 
     def calculate_delivery_charge(self, division):
-        # Define delivery charges based on division
         delivery_charges = {
             'Dhaka': 200.00,
             'Chittagong': 300.00,
@@ -95,36 +112,52 @@ class Checkout(LoginRequiredMixin, FormView):
             'Rangpur': 300.00,
             'Mymensingh': 300.00,
         }
-        return delivery_charges.get(division, 200.00)  # Default charge if division not found
+        return delivery_charges.get(division, 200.00)
 
-    def process_payment(self, payment_method, total_cost):
+    def process_bkash_payment(self, amount):
         """
-        Process the payment based on the selected payment method.
-        Returns True if payment is successful, False otherwise.
+        Process bKash payment for the given amount.
         """
-        if payment_method == 'paypal':
-            # Process PayPal payment (integrate with PayPal API)
-            return self.process_paypal_payment(total_cost)
-        elif payment_method == 'credit_card':
-            # Process Credit Card payment (integrate with Stripe, etc.)
-            return self.process_credit_card_payment(total_cost)
-        elif payment_method == 'cod':
-            # Cash on Delivery doesn't need actual payment processing
-            return True
-        else:
-            # Unsupported payment method
+        # Step 1: Get the bKash Token
+        token_url = f"{settings.BKASH_BASE_URL}/token/grant"
+        token_headers = {
+            'Content-Type': 'application/json',
+            'Authorization': 'Basic ' + settings.BKASH_BASIC_AUTH,
+        }
+        token_data = {
+            'app_key': settings.BKASH_APP_KEY,
+            'app_secret': settings.BKASH_APP_SECRET
+        }
+        try:
+            token_response = requests.post(token_url, json=token_data, headers=token_headers)
+            token_response.raise_for_status()  # Raise an exception for HTTP errors
+            token = token_response.json().get('id_token')
+
+            if not token:
+                return False
+
+            # Step 2: Create the Payment
+            payment_url = f"{settings.BKASH_BASE_URL}/checkout/create"
+            payment_headers = {
+                'Content-Type': 'application/json',
+                'Authorization': f'Bearer {token}'
+            }
+            payment_data = {
+                'amount': str(amount),  # Pass the amount to charge
+                'currency': 'BDT',
+                'intent': 'sale',
+                'merchantInvoiceNumber': f'Inv{self.request.user.id}'  # Unique invoice number for the transaction
+            }
+
+            payment_response = requests.post(payment_url, json=payment_data, headers=payment_headers)
+            payment_response.raise_for_status()
+            payment_info = payment_response.json()
+
+            # Step 3: Check if payment is successful
+            if payment_info.get('paymentID'):
+                return True  # Payment succeeded
+            else:
+                return False  # Payment failed
+        except requests.RequestException as e:
+            print(f"bKash payment error: {e}")
             return False
-
-    def process_paypal_payment(self, total_cost):
-        # Integrate PayPal API here
-        # Example pseudo-code for PayPal:
-        # response = paypal_api.make_payment(total_cost)
-        # return response['status'] == 'success'
-        return True  # Simulate success
-
-    def process_credit_card_payment(self, total_cost):
-        # Integrate credit card payment gateway (like Stripe)
-        # Example pseudo-code for Stripe:
-        # response = stripe_api.charge_card(total_cost)
-        # return response['status'] == 'success'
-        return True  # Simulate success
