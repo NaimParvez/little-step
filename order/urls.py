@@ -9,4 +9,5 @@ from .views import (
 
 urlpatterns = [
     path('checkout/',Checkout.as_view(),name='checkout'),
+    path('order/',Checkout.as_view(),name='order'),
 ]
