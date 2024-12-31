@@ -3,7 +3,8 @@ from django.contrib import admin
 from .models import(
     Category,
     Product,
-    Slider
+    Slider,
+    Review
 )
 
 
@@ -17,3 +18,4 @@ class CategoryAdmin(admin.ModelAdmin):
 admin.site.register(Category,CategoryAdmin)
 admin.site.register(Product,ProductAdmin)
 admin.site.register(Slider)
+admin.site.register(Review)

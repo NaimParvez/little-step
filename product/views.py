@@ -1,8 +1,13 @@
 from typing import Any
 from django.db.models import Q
 from django.http import HttpRequest, HttpResponse
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 from django.views import generic
+
+from .forms import ReviewForm
+from django.contrib import messages
+from django.urls import reverse
+
 from django.core.paginator import(
     PageNotAnInteger,
     EmptyPage,
@@ -13,7 +18,8 @@ from cart.carts import Cart
 from .models import(
     Category,
     Product,
-    Slider
+    Slider,
+    Review,
 )
 
 class Home(generic.TemplateView):
@@ -33,14 +39,38 @@ class Home(generic.TemplateView):
 class ProductDetails(generic.DetailView):
     model = Product
     template_name = 'product/product-details.html'
-    slug_url_kwarg='slug'
+    slug_url_kwarg = 'slug'
 
-   
-    
-    def get_context_data(self,**kwargs):
-        context =super().get_context_data(**kwargs)
-        context['related_products']=self.get_object().related
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['related_products'] = self.get_object().related
+        context['review_form'] = ReviewForm()
+        context['reviews'] = self.get_object().reviews.all()
+        if self.request.user.is_authenticated:
+            context['user_has_reviewed'] = self.get_object().reviews.filter(user=self.request.user).exists()
         return context
+
+    def post(self, request, *args, **kwargs):
+        if not request.user.is_authenticated:
+            messages.error(request, 'Please log in to submit a review.')
+            return redirect('login')
+
+        product = self.get_object()
+        form = ReviewForm(request.POST)
+
+        if form.is_valid():
+            review = form.save(commit=False)
+            review.product = product
+            review.user = request.user
+            try:
+                review.save()
+                messages.success(request, 'Your review has been submitted.')
+            except:
+                messages.error(request, 'You have already reviewed this product.')
+        else:
+            messages.error(request, 'Error submitting review.')
+        
+        return redirect(reverse('product-details', kwargs={'slug': product.slug}))
     
 class CategorytDetails(generic.DetailView):
     model = Category

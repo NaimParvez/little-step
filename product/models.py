@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.db import models
 
 # Create your models here.
@@ -44,3 +45,26 @@ class Slider(models.Model):
      
      def __str__(self) -> str:
          return self.title
+
+
+
+
+class Review(models.Model):
+    product = models.ForeignKey(Product, related_name='reviews', on_delete=models.CASCADE)
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL, 
+        related_name='reviews', 
+        on_delete=models.CASCADE,
+        null=True,  # Allow null temporarily for migration
+        blank=True  # Allow blank in forms
+    )
+    rating = models.IntegerField(choices=[(i, i) for i in range(1, 6)])
+    comment = models.TextField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-created_at']
+        unique_together = ('product', 'user')
+
+    def __str__(self):
+        return f'{self.user.username if self.user else "Anonymous"} - {self.product.title} - {self.rating}★'

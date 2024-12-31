@@ -146,7 +146,7 @@
                         </div>
                         <div class="cart-item">
                             <span>Shipping</span>
-                            <p id="charge-amount">0</p>
+                            <p id="charge-amount">{{delivery_charge}}</p>
                         </div>
                         <div class="cart-total">
                             <span>Total</span>
@@ -202,13 +202,19 @@
         document.getElementById('division').addEventListener('change', function() {
             const selectedDivision = this.value;
             const deliveryChargeDisplay = document.getElementById('charge-amount');
+            const totalCostDisplay = document.getElementById('total-cost');  // Total cost element
 
             console.log('Selected Division:', selectedDivision);  // Debugging line
 
             if (selectedDivision in deliveryCharges) {
-                deliveryChargeDisplay.textContent = deliveryCharges[selectedDivision].toFixed(2);
+                const deliveryCharge = deliveryCharges[selectedDivision];
+                const cartTotal = parseFloat(document.getElementById('cart-total').textContent) || 0;
+    
+                deliveryChargeDisplay.textContent = deliveryCharge.toFixed(2);
+                totalCostDisplay.textContent = (cartTotal + deliveryCharge).toFixed(2);  // Update total cost
             } else {
                 deliveryChargeDisplay.textContent = '0.00';
+                totalCostDisplay.textContent = document.getElementById('cart-total').textContent;  // Default to cart total
             }
         });
 
@@ -234,6 +240,13 @@
                 advancePaymentInput.value = '';  // Clear the advance payment value
             }
         }
+        // Attach event listeners to payment method radio buttons
+    //document.querySelectorAll('input[name="payment_method"]').forEach(function(input) {
+     //   input.addEventListener('change', updateAdvancePayment);
+    //});
+
+    // Initialize the advance payment section on page load
+    //updateAdvancePayment();
         
     });
 </script>

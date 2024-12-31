@@ -6,3 +6,30 @@
 }
 
 
+.review-item {
+    border-bottom: 1px solid #eee;
+    padding: 15px 0;
+}
+
+.review-header {
+    margin-bottom: 10px;
+}
+
+.rating {
+    color: #ffd700;
+    margin: 0 10px;
+}
+
+.review-content {
+    color: #666;
+}
+
+.review-form {
+    background: #f9f9f9;
+    padding: 20px;
+    border-radius: 5px;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
