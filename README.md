@@ -1,7 +1,7 @@
 
 # Violet Online Store
 
-Violet Online Store is a Django-powered e-commerce platform designed for an intuitive and engaging online shopping experience. The project, developed as part of the Software Engineering Sessional (CSE 3206) course, features product browsing, user authentication, shopping cart management, and a rating/review system. This repository includes the full source code for the Violet Online Store, showcasing various functionalities such as product management, user interaction, and an admin dashboard.
+Violet Online Store is a Django-powered e-commerce platform designed for an intuitive and engaging online shopping experience. The project features like product browsing, user authentication, shopping cart management, and a rating/review system. This repository includes the full source code for the Violet Online Store, showcasing various functionalities such as product management, user interaction, and an admin dashboard.
 
 ## Features
 
